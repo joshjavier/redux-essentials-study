@@ -1,7 +1,7 @@
 import React from 'react'
-import { nanoid } from '@reduxjs/toolkit'
-import { useAppDispatch } from '@/app/hooks'
-import { type Post, postAdded } from './posts-slice'
+import { useAppDispatch, useAppSelector } from '@/app/hooks'
+import { postAdded } from './posts-slice'
+import { selectCurrentUsername } from '../auth/auth-slice'
 
 interface AddPostFormFields extends HTMLFormControlsCollection {
   postTitle: HTMLInputElement
@@ -14,6 +14,7 @@ interface AddPostFormElements extends HTMLFormElement {
 
 export const AddPostForm = () => {
   const dispatch = useAppDispatch()
+  const userId = useAppSelector(selectCurrentUsername)!
 
   const handleSubmit = (e: React.FormEvent<AddPostFormElements>) => {
     e.preventDefault()
@@ -22,12 +23,7 @@ export const AddPostForm = () => {
     const title = elements.postTitle.value
     const content = elements.postContent.value
 
-    const newPost: Post = {
-      id: nanoid(),
-      title,
-      content,
-    }
-    dispatch(postAdded(newPost))
+    dispatch(postAdded(title, content, userId))
 
     e.currentTarget.reset()
   }
