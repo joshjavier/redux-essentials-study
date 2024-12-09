@@ -10,6 +10,7 @@ import { RootState } from '@/app/store'
 import { createAppAsyncThunk } from '@/app/with-types'
 import { AppStartListening } from '@/app/listener-middleware'
 import { client } from '@/api/client'
+import { apiSlice } from '../api/api-slice'
 
 export interface Reactions {
   thumbsUp: number
@@ -30,7 +31,7 @@ export interface Post {
   reactions: Reactions
 }
 
-type PostUpdate = Pick<Post, 'id' | 'title' | 'content'>
+export type PostUpdate = Pick<Post, 'id' | 'title' | 'content'>
 export type NewPost = Pick<Post, 'title' | 'content' | 'user'>
 
 interface PostsState extends EntityState<Post, string> {
@@ -138,7 +139,7 @@ export const selectPostsError = (state: RootState) => state.posts.error
 
 export const addPostListeners = (startAppListening: AppStartListening) => {
   startAppListening({
-    actionCreator: addNewPost.fulfilled,
+    matcher: apiSlice.endpoints.addNewPost.matchFulfilled,
     effect: async (action, listenerApi) => {
       const { toast } = await import('react-tiny-toast')
 
