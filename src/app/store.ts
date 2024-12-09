@@ -1,4 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
+
+import { apiSlice } from '@/features/api/api-slice'
 import postsReducer from '@/features/posts/posts-slice'
 import usersReducer from '@/features/users/users-slice'
 import authReducer from '@/features/auth/auth-slice'
@@ -12,9 +14,12 @@ export const store = configureStore({
     users: usersReducer,
     auth: authReducer,
     notifications: notificationsReducer,
+    [apiSlice.reducerPath]: apiSlice.reducer,
   },
   middleware(getDefaultMiddleware) {
-    return getDefaultMiddleware().prepend(listenerMiddleware.middleware)
+    return getDefaultMiddleware()
+      .prepend(listenerMiddleware.middleware)
+      .concat(apiSlice.middleware)
   },
 })
 
