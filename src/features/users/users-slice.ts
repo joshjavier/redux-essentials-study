@@ -2,10 +2,12 @@ import { createSlice } from '@reduxjs/toolkit'
 import { RootState } from '@/app/store'
 import { createAppAsyncThunk } from '@/app/with-types'
 import { client } from '@/api/client'
+import { selectCurrentUsername } from '../auth/auth-slice'
 
 interface User {
   id: string
   name: string
+  username: string
 }
 
 export const fetchUsers = createAppAsyncThunk('users/fetchUsers', async () => {
@@ -31,3 +33,7 @@ export default usersSlice.reducer
 export const selectAllUsers = (state: RootState) => state.users
 export const selectUserById = (state: RootState, userId: string | null) =>
   state.users.find(user => user.id === userId)
+export const selectCurrentUser = (state: RootState) => {
+  const username = selectCurrentUsername(state)
+  return state.users.find(user => user.id === username)
+}
