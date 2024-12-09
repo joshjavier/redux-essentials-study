@@ -1,5 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
+import { ToastContainer } from 'react-tiny-toast'
 
 import { Navbar } from './components/Navbar'
 import { PostsMainPage } from './features/posts/posts-main-page'
@@ -45,6 +46,7 @@ function App() {
             }
           />
         </Routes>
+        <ToastContainer />
       </div>
     </Router>
   )
