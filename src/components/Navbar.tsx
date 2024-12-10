@@ -3,12 +3,18 @@ import { Link } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '@/app/hooks'
 import { logout } from '@/features/auth/auth-slice'
 import { selectCurrentUser } from '@/features/users/users-slice'
-import { fetchNotifications, selectUnreadNotificationsCount } from '@/features/notifications/notifications-slice'
+import {
+  fetchNotificationsWebsocket,
+  selectUnreadNotificationsCount,
+  useGetNotificationsQuery
+} from '@/features/notifications/notifications-slice'
 import { UserIcon } from './UserIcon'
 
 export const Navbar = () => {
   const dispatch = useAppDispatch()
   const user = useAppSelector(selectCurrentUser)
+
+  useGetNotificationsQuery()
 
   const numUnreadNotifications = useAppSelector(selectUnreadNotificationsCount)
 
@@ -22,7 +28,7 @@ export const Navbar = () => {
     }
 
     const fetchNewNotifications = () => {
-      dispatch(fetchNotifications())
+      dispatch(fetchNotificationsWebsocket())
     }
 
     let unreadNotificationsBadge: React.ReactNode | undefined
